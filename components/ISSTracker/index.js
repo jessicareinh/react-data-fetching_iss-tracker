@@ -1,3 +1,4 @@
+import useSWR from "swr";
 import { useEffect, useState } from "react";
 import Controls from "../Controls/index";
 import Map from "../Map/index";
@@ -10,6 +11,30 @@ export default function ISSTracker() {
     latitude: 0,
   });
 
+  const fetcher = async (url) => {
+    const response = await fetch(url);
+    if(!response.ok) {
+      throw new Error("")
+    }
+  }
+
+  const {
+    data: coords,
+    isLoading,
+    error,
+  } = useSWR(`https://api.wheretheiss.at/v1/satellites/25544/${id}`, fetcher)};
+
+  if (error) {
+    return <h1>failed to load: {error.message}</h1>;
+  }
+
+  if(isLoading) {
+    return <h1> ✌️ is loading</h1>; 
+  }
+
+  return (
+    <></>
+  )
   async function getISSCoords() {
     try {
       const response = await fetch(URL);
